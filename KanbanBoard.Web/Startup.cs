@@ -1,4 +1,5 @@
-﻿using KanbanBoard.Core.Infrastucture;
+﻿using AutoMapper;
+using KanbanBoard.Core.Infrastucture;
 using KanbanBoard.Core.Services;
 using KanbanBoard.Infrastructure;
 using Microsoft.AspNetCore.Builder;
@@ -21,6 +22,7 @@ namespace KanbanBoard.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddAutoMapper(typeof(Startup));
 
             InitializeDependencyInjectionService(services);
         }

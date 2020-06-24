@@ -1,6 +1,8 @@
-﻿@model List<KanbanBoard.Core.Domain.PostIt>
+﻿@using KanbanBoard.Web.Models;
 
-@foreach (var postIt in Model)
+@model KanbanBoardViewModel
+
+@foreach (var postIt in Model.PostIts)
 {
     <p>@postIt.Title</p>
 }

@@ -11,7 +11,5 @@ namespace KanbanBoard.Core.Domain
         public DateTime? StartedAt { get; set; }
         public DateTime? ClosedAt { get; set; }
         public bool IsDeleted { get; set; }
-
-        public PostIt() { }
     }
 }
