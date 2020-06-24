@@ -1,0 +1,6 @@
+﻿@model List<KanbanBoard.Core.Domain.PostIt>
+
+@foreach (var postIt in Model)
+{
+    <p>@postIt.Title</p>
+}
