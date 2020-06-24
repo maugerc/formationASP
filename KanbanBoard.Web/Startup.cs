@@ -44,8 +44,9 @@ namespace KanbanBoard.Web
 
         private static void InitializeDependencyInjectionService(IServiceCollection services)
         {
-            services.AddScoped<KanbanBoardService, KanbanBoardService>();
+            services.AddSingleton<IClockService, UtcClockService>();
 
+            services.AddScoped<KanbanBoardService, KanbanBoardService>();
             services.AddScoped<IPostItRepository, InMemoryPostItRepository>();
         }
     }

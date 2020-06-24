@@ -2,7 +2,11 @@
 
 @model KanbanBoardViewModel
 
+@Html.ActionLink("Ajouter", "AddPostIt")
+
 @foreach (var postIt in Model.PostIts)
 {
-    <p>@postIt.Title</p>
+    <p>
+        @postIt.Title - @Html.ActionLink("Modifier", $"PostIt", new { id = postIt.Id })
+    </p>
 }

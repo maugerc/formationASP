@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using KanbanBoard.Core.Command;
 using KanbanBoard.Core.Domain;
 using KanbanBoard.Core.Services;
 using KanbanBoard.Web.Models;
@@ -19,6 +20,7 @@ namespace KanbanBoard.Web.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             List<PostIt> postIts = _kanbanBoardService.GetAllPostIts();
@@ -29,6 +31,46 @@ namespace KanbanBoard.Web.Controllers
             };
 
             return View(vm);
+        }
+
+        [HttpGet]
+        public IActionResult AddPostIt()
+        {
+            return View(new AddPostItViewModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddPostIt([FromForm] AddPostItViewModel addPostIt)
+        {
+            if (ModelState.IsValid)
+            {
+                _kanbanBoardService.AddPostIt(_mapper.Map<AddPostItCommand>(addPostIt));
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(addPostIt);
+        }
+
+        [HttpGet("KanbanBoard/PostIt/{id}")]
+        public IActionResult UpdatePostIt(long id)
+        {
+            var postIt = _kanbanBoardService.GetPostIt(id);
+
+            return View(_mapper.Map<UpdatePostItViewModel>(postIt));
+        }
+
+        [HttpPost("KanbanBoard/PostIt/{id}")]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdatePostIt([FromForm] UpdatePostItViewModel updatedPostIt)
+        {
+            if (ModelState.IsValid)
+            {
+                _kanbanBoardService.UpdatePostIt(_mapper.Map<UpdatePostItCommand>(updatedPostIt));
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(updatedPostIt);
         }
     }
 }

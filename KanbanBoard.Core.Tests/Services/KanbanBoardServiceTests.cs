@@ -15,11 +15,12 @@ namespace KanbanBoard.Core.Tests
         {
             // Arrange
             var repository = new Mock<IPostItRepository>();
+            var utcClockService = new Mock<IClockService>();
             var postIts = new List<PostIt>() { new PostIt() { Title = "Post It 1" } };
 
             repository.Setup(r => r.GetAll())
                 .Returns(postIts);
-            var service = new KanbanBoardService(repository.Object);
+            var service = new KanbanBoardService(repository.Object, utcClockService.Object);
 
             // Act
             var result = service.GetAllPostIts();

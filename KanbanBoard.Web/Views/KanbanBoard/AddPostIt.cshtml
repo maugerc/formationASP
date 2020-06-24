@@ -1,0 +1,19 @@
+﻿@model KanbanBoard.Web.Models.AddPostItViewModel
+
+@using (Html.BeginForm())
+{
+    <div>
+        @Html.LabelFor(m => m.Title)
+        @Html.TextBoxFor(m => m.Title)
+        @Html.ValidationMessageFor(m => m.Title)
+    </div>
+    <div>
+        @Html.LabelFor(m => m.Description)
+        @Html.TextAreaFor(m => m.Description)
+        @Html.ValidationMessageFor(m => m.Description)
+    </div>
+    <div>
+        @Html.ActionLink("Annuler", "Index")
+        <button>Create</button>
+    </div>
+}

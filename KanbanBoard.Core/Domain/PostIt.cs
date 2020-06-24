@@ -4,6 +4,7 @@ namespace KanbanBoard.Core.Domain
 {
     public class PostIt
     {
+        public long Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public PostItStatus Status { get; set; }

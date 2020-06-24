@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using KanbanBoard.Core.Command;
 using KanbanBoard.Core.Domain;
 
 namespace KanbanBoard.Web.Models
@@ -8,6 +9,9 @@ namespace KanbanBoard.Web.Models
         public ViewModelProfile()
         {
             CreateMap<PostIt, PostItViewModel>();
+            CreateMap<AddPostItViewModel, AddPostItCommand>();
+            CreateMap<PostIt, UpdatePostItViewModel>();
+            CreateMap<UpdatePostItViewModel, UpdatePostItCommand>();
         }
     }
 }
