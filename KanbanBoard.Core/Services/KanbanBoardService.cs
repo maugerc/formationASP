@@ -57,5 +57,10 @@ namespace KanbanBoard.Core.Services
         {
             return _userRepository.GetByUserNamePassword(userName, password);
         }
+
+        public void UpdatePostItStatus(long postItId, PostItStatus postItStatus)
+        {
+
+        }
     }
 }
