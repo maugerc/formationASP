@@ -52,7 +52,7 @@ namespace KanbanBoard.Web.Controllers
             return View(addPostIt);
         }
 
-        [HttpGet("KanbanBoard/PostIt/{id}")]
+        [HttpGet("KanbanBoard/UpdatePostIt/{id}")]
         public IActionResult UpdatePostIt(long id)
         {
             var postIt = _kanbanBoardService.GetPostIt(id);
@@ -60,7 +60,7 @@ namespace KanbanBoard.Web.Controllers
             return View(_mapper.Map<UpdatePostItViewModel>(postIt));
         }
 
-        [HttpPost("KanbanBoard/PostIt/{id}")]
+        [HttpPost("KanbanBoard/UpdatePostIt/{id}")]
         [ValidateAntiForgeryToken]
         public IActionResult UpdatePostIt([FromForm] UpdatePostItViewModel updatedPostIt)
         {
