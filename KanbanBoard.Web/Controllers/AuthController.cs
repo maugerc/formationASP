@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using KanbanBoard.Core.Services;
 using KanbanBoard.Web.Models;
 using Microsoft.AspNetCore.Authentication;
@@ -23,7 +24,7 @@ namespace KanbanBoard.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login([FromForm] LoginViewModel model)
+        public async Task<IActionResult> Login([FromForm] LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -41,11 +42,20 @@ namespace KanbanBoard.Web.Controllers
 
                     var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
-                    HttpContext.SignInAsync(claimsPrincipal);
+                    await HttpContext.SignInAsync(claimsPrincipal);
+
+                    return RedirectToAction("Index", "KanbanBoard");
                 }
             }
 
             return View(model);
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+
+            return View("Login");
         }
     }
 }
