@@ -27,7 +27,9 @@ namespace KanbanBoard.Web
 
             services
                 .AddAuthentication(options =>
-                    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme)
+                {
+                    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                })
                 .AddCookie(options =>
                 {
                     options.LoginPath = "/Auth/Login";
@@ -53,7 +55,7 @@ namespace KanbanBoard.Web
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Auth}/{action=Login}/{id?}");
+                    template: "{controller=KanbanBoard}/{action=Index}/{id?}");
             });
         }
 

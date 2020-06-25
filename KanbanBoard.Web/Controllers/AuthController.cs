@@ -31,14 +31,14 @@ namespace KanbanBoard.Web.Controllers
 
                 if (user != null)
                 {
-
-                    var claims = new List<Claim>()
+                    var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                         new Claim(ClaimTypes.Name, user.UserName)
                     };
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
                     var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
                     HttpContext.SignInAsync(claimsPrincipal);
