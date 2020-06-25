@@ -5,10 +5,12 @@ using KanbanBoard.Core.Command;
 using KanbanBoard.Core.Domain;
 using KanbanBoard.Core.Services;
 using KanbanBoard.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KanbanBoard.Web.Controllers
 {
+    [Authorize]
     public class KanbanBoardController : Controller
     {
         private readonly KanbanBoardService _kanbanBoardService;
@@ -62,7 +64,7 @@ namespace KanbanBoard.Web.Controllers
 
         [HttpPost("KanbanBoard/UpdatePostIt/{id}")]
         [ValidateAntiForgeryToken]
-        public IActionResult UpdatePostIt([FromForm] UpdatePostItViewModel updatedPostIt)
+        public IActionResult UpdatePostIt(long id, [FromForm] UpdatePostItViewModel updatedPostIt)
         {
             if (ModelState.IsValid)
             {

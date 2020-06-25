@@ -1,7 +1,9 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using KanbanBoard.Core.Infrastucture;
 using KanbanBoard.Core.Services;
 using KanbanBoard.Infrastructure;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +24,17 @@ namespace KanbanBoard.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services
+                .AddAuthentication(options =>
+                    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Auth/Login";
+                    options.LogoutPath = "/Auth/Logout";
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                });
+
             services.AddAutoMapper(typeof(Startup));
 
             InitializeDependencyInjectionService(services);
@@ -34,11 +47,13 @@ namespace KanbanBoard.Web
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseAuthentication();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=KanbanBoard}/{action=Index}/{id?}");
+                    template: "{controller=Auth}/{action=Login}/{id?}");
             });
         }
 
@@ -48,6 +63,7 @@ namespace KanbanBoard.Web
 
             services.AddScoped<KanbanBoardService, KanbanBoardService>();
             services.AddScoped<IPostItRepository, InMemoryPostItRepository>();
+            services.AddScoped<IUserRepository, InMemoryUserRepository>();
         }
     }
 }

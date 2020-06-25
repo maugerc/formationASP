@@ -9,11 +9,16 @@ namespace KanbanBoard.Core.Services
     {
         private readonly IPostItRepository _postItRepository;
         private readonly IClockService _clockService;
+        private readonly IUserRepository _userRepository;
 
-        public KanbanBoardService(IPostItRepository postItRepository, IClockService clockService)
+        public KanbanBoardService(
+            IPostItRepository postItRepository,
+            IClockService clockService,
+            IUserRepository userRepository)
         {
             _postItRepository = postItRepository;
             _clockService = clockService;
+            _userRepository = userRepository;
         }
 
         public List<PostIt> GetAllPostIts()
@@ -46,6 +51,11 @@ namespace KanbanBoard.Core.Services
             postId.Description = postItCommand.Description;
 
             _postItRepository.Update(postId);
+        }
+
+        public User GetUser(string userName, string password)
+        {
+            return _userRepository.GetByUserNamePassword(userName, password);
         }
     }
 }
