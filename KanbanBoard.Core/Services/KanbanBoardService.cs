@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using KanbanBoard.Core.Command;
 using KanbanBoard.Core.Domain;
+using KanbanBoard.Core.Domain.Exceptions;
 using KanbanBoard.Core.Infrastucture;
 
 namespace KanbanBoard.Core.Services
@@ -58,9 +60,27 @@ namespace KanbanBoard.Core.Services
             return _userRepository.GetByUserNamePassword(userName, password);
         }
 
-        public void UpdatePostItStatus(long postItId, PostItStatus postItStatus)
+        public void UpdatePostItStatus(long id, PostItStatus postItStatus)
         {
+            var postIt = _postItRepository.GetById(id);
 
+            if (postIt == null)
+                throw new ArgumentOutOfRangeException(id.ToString());
+
+            if (postIt.Status == PostItStatus.TODO && postItStatus == PostItStatus.INPROGRESS)
+            {
+                postIt.StartedAt = _clockService.GetNow();
+                postIt.Status = postItStatus;
+                _postItRepository.Update(postIt);
+            }
+            else if (postIt.Status == PostItStatus.INPROGRESS && postItStatus == PostItStatus.DONE)
+            {
+                postIt.ClosedAt = _clockService.GetNow();
+                postIt.Status = postItStatus;
+                _postItRepository.Update(postIt);
+            }
+            else
+                throw new InvalideTransitionForPostItException(id, postIt.Status, postItStatus);
         }
     }
 }

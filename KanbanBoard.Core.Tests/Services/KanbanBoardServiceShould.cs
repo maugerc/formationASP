@@ -30,7 +30,7 @@ namespace KanbanBoard.Core.Tests.Services
         // Given Then When
         [Theory]
         [InlineData(PostItStatus.TODO, PostItStatus.INPROGRESS)]
-        [InlineData(PostItStatus.INPROGRESS, PostItStatus.TODO)]
+        [InlineData(PostItStatus.INPROGRESS, PostItStatus.DONE)]
         public void AcceptUpdatePostItStatusForAllowedTransitions(PostItStatus sourceStatus, PostItStatus destStatus)
         {
             // Arrange
