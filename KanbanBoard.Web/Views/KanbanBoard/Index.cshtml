@@ -1,12 +1,86 @@
-﻿@using KanbanBoard.Web.Models;
+﻿@using KanbanBoard.Core.Domain
+@using KanbanBoard.Web.Models;
 
 @model KanbanBoardViewModel
 
 @Html.ActionLink("Ajouter", "AddPostIt")
 
-@foreach (var postIt in Model.PostIts)
+<div>
+    <h2>TODO :</h2>
+    <ul id="todo-column" style="min-height: 100px; background-color: red;">
+        @foreach (var postIt in Model.PostIts.Where(p => p.Status == PostItStatus.TODO))
+        {
+            <li data-id="@postIt.Id">
+                @postIt.Title - @Html.ActionLink("Modifier", $"UpdatePostIt", new { id = postIt.Id })
+            </li>
+        }
+    </ul>
+</div>
+<div>
+    <h2>In progress :</h2>
+    <ul id="inprogress-column" style="min-height: 100px; background-color: orange;">
+        @foreach (var postIt in Model.PostIts.Where(p => p.Status == PostItStatus.INPROGRESS))
+        {
+            <li data-id="@postIt.Id">
+                @postIt.Title - @Html.ActionLink("Modifier", $"UpdatePostIt", new { id = postIt.Id })
+            </li>
+        }
+    </ul>
+</div>
+<div>
+    <h2>DONE :</h2>
+    <ul id="done-column" style="min-height: 100px; background-color: green;">
+        @foreach (var postIt in Model.PostIts.Where(p => p.Status == PostItStatus.DONE))
+        {
+            <li data-id="@postIt.Id">
+                @postIt.Title - @Html.ActionLink("Modifier", $"UpdatePostIt", new { id = postIt.Id })
+            </li>
+        }
+    </ul>
+</div>
+
+@section Scripts
 {
-    <p>
-        @postIt.Title - @Html.ActionLink("Modifier", $"UpdatePostIt", new { id = postIt.Id })
-    </p>
+    <script type="text/javascript">
+        var updateStatusApi = function (id, destStatus) {
+            $.ajax({
+                url: '/KanbanBoard/UpdatePostItStatus/' + id,
+                method: 'put',
+                data: '{ "destStatus": ' + destStatus + ' }',
+                dataType: 'json',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        };
+
+        $("#todo-column").sortable({
+            stop: function (e, ui) { },
+            update: function (e, ui) { },
+            connectWith: "#inprogress-column",
+            appendTo: 'body'
+        }).disableSelection();
+
+        $("#inprogress-column").sortable({
+            stop: function (e, ui) { },
+            update: function (e, ui) {
+                var id = ui.item.attr('data-id');
+                console.log(id);
+                updateStatusApi(id, 1);
+            },
+            connectWith: "#done-column",
+            appendTo: 'body'
+        }).disableSelection();
+
+        $("#done-column").sortable({
+            stop: function (e, ui) { },
+            update: function (e, ui) {
+                var id = ui.item.attr('data-id');
+                console.log(id);
+                updateStatusApi(id, 2);
+            },
+            connectWith: "#done-column",
+            appendTo: 'body'
+        }).disableSelection();
+    </script>
 }

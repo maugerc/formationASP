@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using KanbanBoard.Core.Command;
 using KanbanBoard.Core.Domain;
+using KanbanBoard.Core.Domain.Exceptions;
 using KanbanBoard.Core.Services;
 using KanbanBoard.Web.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KanbanBoard.Web.Controllers
@@ -73,6 +76,25 @@ namespace KanbanBoard.Web.Controllers
             }
 
             return View(updatedPostIt);
+        }
+
+        [HttpPut]
+        public IActionResult UpdatePostItStatus(long id, [FromBody] UpdatePostItStatusViewModel model)
+        {
+            try
+            {
+                _kanbanBoardService.UpdatePostItStatus(id, model.DestStatus);
+
+                return Ok();
+            }
+            catch (InvalideTransitionForPostItException)
+            {
+                return BadRequest();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }
